@@ -47,18 +47,16 @@ let createTimeCell = function () {
 }
 
 let createSubjectCell = function () {
-    let cell = $("<div>")
+    let cell = $("<textarea>")
     cell.addClass("col-9")
     cell.attr("data-cell", "subject-cell")
-    console.log("subject",cell)
     return(cell)
 }
 let createStatusCell = function () {
-    let cell = $("<div>")
+    let cell = $("<button>")
     cell.addClass("col")
     cell.attr("data-cell", "status-cell")
     cell.text("Save")
-    console.log("status", cell)
     return(cell)
 }
 
@@ -72,6 +70,10 @@ let createEntryRow = function () {
 
 
 let appear = function () {
+
+    containerEl.html("")
+    HH = 08
+
     for (let i = 0; i < 9; i++ ) {
         timeCell = createTimeCell()
         subjectCell = createSubjectCell()
@@ -80,16 +82,20 @@ let appear = function () {
         entryRow.attr("data-row", HH)
         entryRow.append(timeCell, subjectCell, statusCell)
         containerEl.append(entryRow)
+
     }
     
 }
 
-// - CODE ACTING FUNKY - KEEPS CONTINUING THE FOR LOOP
-// $( window ).scroll(function() {
-//     appear()
-// });
-appear()
+// // - CODE ACTING FUNKY - KEEPS CONTINUING THE FOR LOOP
+// // $( window ).scroll(function() {
+// //     appear()
+// // });
 
+// bodyEl.on("click", appear)
+
+
+appear()
 
 
 
@@ -100,6 +106,8 @@ appear()
 
 
 let currentHour = today.format("HH")
+
+// let currentHour = 12
 let allrows = containerEl.children()
 
 // THIS IS NEED TO BE WRAPPED IN A SETINTERVAL REFRESH TIMER! 
@@ -110,12 +118,10 @@ for (let index = 0; index < allrows.length; index++) {
     let subjectCol = row.children().eq([1])
 
     if (dataRow  === currentHour) {
-        console.log(dataRow)
         subjectCol.addClass("present")
         subjectCell.removeClass("future past")
 
     } else if (dataRow > currentHour) {
-        console.log(dataRow)
         subjectCol.addClass("future")
         subjectCell.removeClass("present past")
 
@@ -132,46 +138,7 @@ for (let index = 0; index < allrows.length; index++) {
 //  TASK FOUR - Allow a user to enter an event when they click a timeblock
 // ------------------------------
 
-
-
-
-
-
-// LOGIC FOR ENTERING INFORMATION 
-// On click - input field is opened 
-// User enter information into input field 
-// On click anywhere else, or when user presses enter
-// Store that data into a variable., which is appended to the row. 
-
-let subject = allrows.eq([0]).children().eq([1])
-let saveButton = allrows.eq([0]).children().eq([2])
-// subject.text("First item")
-
-
-let enterEntry = function() {
-
-    subject.text($)
-
-    console.log(" Enter Entry")
-    //  let newText = textInput.val()
-    subject.append(newText)
-    
-    // subject.append(entry)
-    // console.log(entry);
-    
-
-    // let userInput = inputField.text()
-   
-}
-
-let saveEntry = function() {
-    console.log("entry save")
-
-}
-
-subject.on("click", enterEntry)
-
-saveButton.on("click", saveEntry)
+// - This already happens when the element is dynamically created. 
 
 
 
@@ -182,6 +149,48 @@ saveButton.on("click", saveEntry)
 // ------------------------------
 //  TASK FIVE - Save the event in local storage when the save button is clicked in that timeblock
 // ------------------------------
+
+
+
+
+let subject = allrows.eq([0]).children().eq([1])
+let saveButton = allrows.eq([0]).children().eq([2])
+// subject.text("First item")
+
+
+let enterEntry = function() {
+    console.log(" Enter Entry") 
+}
+
+subject.on("click", enterEntry)
+
+// select all rows, and iterate over each row, and make this function happen
+
+let saveEntry = function() {
+    console.log("entry save")
+    let firstRow = allrows.eq([0])
+    let time = firstRow.children().eq([0]).text()
+    let entry = firstRow.children().eq([1]).val()
+    localStorage.setItem(time, entry)
+    // for (let index = 0; index < allrows.length; index++) {
+    //     let row = allrows.eq([index])
+    //     let time = row.children().eq([0]).text()
+    //     let entry = row.children().eq([1]).val()
+    //     localStorage.setItem(time, entry) 
+    //        }
+
+}
+
+
+
+
+
+
+saveButton.on("click", saveEntry)
+
+
+
+
 
 
 

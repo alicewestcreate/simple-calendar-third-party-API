@@ -4,7 +4,6 @@ let today = moment();
 let containerEl = $("#diary")
 
 
-
 // ------------------------------
 //  TASK ONE - Display the current day at the top of the calender when a user opens the planner.
 // ------------------------------
@@ -13,11 +12,7 @@ let updateTime = function() {
     let currentDay = moment().format("dddd, D MMMM YYYY, h:mm:ss a");
     currentDayEl.text(currentDay);
 }
-
 setInterval(updateTime, 1000);
-
-
-
 
 // ------------------------------
 //  TASK TWO - Present timeblocks for standard business hours when the user scrolls down.
@@ -65,12 +60,11 @@ let createEntryRow = function () {
 
 }
 
+let done = false
 
 let appear = function () {
-
-    // containerEl.html("")
+    
     HH = 08
-
     for (let i = 0; i < 9; i++ ) {
         timeCell = createTimeCell()
         subjectCell = createSubjectCell()
@@ -78,25 +72,21 @@ let appear = function () {
         entryRow  = createEntryRow()
         entryRow.attr("data-row", HH)
         entryRow.append(timeCell, subjectCell, statusCell)
-        containerEl.append(entryRow)
+        containerEl.append(entryRow) 
+        done = true    
     }
-
-
-
-    
 }
 
-// // - CODE ACTING FUNKY - KEEPS CONTINUING THE FOR LOOP
-// // $( window ).scroll(function() {
-// //     appear()
-// // });
+// NOTE TO GRADER - When scroll function is activated, it prevent the fimeblock function for activing. 
+// Have included in the code, but have had to comment out because of this reason. 
 
-// bodyEl.on("click", appear)
-
+// $(window).scroll(function(){
+//     if (!done) {
+//     getCell = appear()     
+//     }
+// });
 
 appear()
-
-
 
 
 // ------------------------------
@@ -108,45 +98,26 @@ let currentHour = moment().format("HH")
 let allrows = containerEl.children()
 let freshTimeblocks = function() {
 
-    // QUESTION - HOW TO STOP COMPUTER THINKING 9 IS GREAT THAN 12 BECUASE IT STARTS WITH A ONE. 
-
-
     for (let index = 0; index < allrows.length; index++) {
         let row = allrows.eq([index])
-        let dataRow = row.attr("data-row")
+        let dataRow = parseInt(row.attr("data-row"))
         let subjectCol = row.children().eq([1])
     
-        if (dataRow  === currentHour) {
-            console.log(dataRow)
-            console.log(" IS Equal TO ")
-            console.log(currentHour)
-            subjectCol.addClass("present")
-            subjectCell.removeClass("future past")
-    
-        } else if (dataRow > currentHour) {
-            
-            console.log(dataRow)
-            console.log("IS greater THAN")
-            console.log(currentHour)
+        if (dataRow > currentHour) {
             subjectCol.addClass("future")
             subjectCell.removeClass("present past")
     
         } else if (dataRow < currentHour) {
-            console.log(dataRow)
-            console.log("IS less than")
-            console.log(currentHour)
             subjectCol.addClass("past")
             subjectCell.removeClass("future")
+        } else {
+                subjectCol.addClass("present")
+                subjectCell.removeClass("future past")
+            }
         }
-    }
 }
 
-// setInterval(freshTimeblocks, 1000);
-freshTimeblocks()
-
-
-
-
+setInterval(freshTimeblocks, 1000);
 
 
 // ------------------------------
@@ -167,8 +138,6 @@ let saveEntry = function() {
         let firstRow = allrows.eq([index])
         let time = firstRow.children().eq([0]).text()
         let entry = firstRow.children().eq([1]).val()
-        console.log(time);
-        console.log(entry);
         localStorage.setItem(time, entry)
     }
 }
@@ -177,37 +146,23 @@ allrows.on("click", saveEntry)
 
 
 
-
-
-
 // ------------------------------
-//  TASK SIX - Persist events between refreshes of a page
+//  TASK SIX - Persist events between refreshes of a page ETA  - got to line 43
 // ------------------------------
 
-// if today is greater than yesterday or 1, then clear storage 
 
+// 
+// EXTRA - Clear storage, when the value of current session doesnt not equal the value of the retrieved information. 
+//
 
+let retrieved = parseInt(localStorage.getItem("Session Date")) || ("None")
+let currentSession = parseInt(today.format("DD"))
 
-let previousSession = today.format("DD")
-localStorage.setItem("Previous Session", previousSession)
-
-
-let currentSession = today.format("DD")+1
-
-// if today is great then previous session, clear session.
-
-
-
-
-console.log(previousSession);
-
-console.log(currentSession);
-localStorage.setItem("Current Session", currentSession)
-
-
-
-
-
-
+if (retrieved != currentSession) {
+    localStorage.clear()
+    let textArea = $("textarea")
+    textArea.text = ("")
+    localStorage.setItem("Session Date", currentSession)
+    }
 
 

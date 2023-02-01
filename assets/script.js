@@ -9,17 +9,12 @@ let containerEl = $("#diary")
 //  TASK ONE - Display the current day at the top of the calender when a user opens the planner.
 // ------------------------------
 
-
-// UPDATE TIME FUNCTION 
 let updateTime = function() {
-    let currentDay = today.format("dddd, D MMMM YYYY, h:mm:ss a");
+    let currentDay = moment().format("dddd, D MMMM YYYY, h:mm:ss a");
     currentDayEl.text(currentDay);
-
 }
-// UPDATE TIME CALLER 
 
 setInterval(updateTime, 1000);
-
 
 
 
@@ -63,7 +58,7 @@ let createStatusCell = function () {
 
 let createEntryRow = function () {
     let row = $("<div>")
-    row.addClass("row")
+    row.addClass("row" )
     return(row)
 
 }
@@ -72,7 +67,7 @@ let createEntryRow = function () {
 let appear = function () {
 
     containerEl.html("")
-    HH = 08
+    let HH = 08
 
     for (let i = 0; i < 9; i++ ) {
         timeCell = createTimeCell()
@@ -82,7 +77,6 @@ let appear = function () {
         entryRow.attr("data-row", HH)
         entryRow.append(timeCell, subjectCell, statusCell)
         containerEl.append(entryRow)
-
     }
     
 }
@@ -144,55 +138,134 @@ for (let index = 0; index < allrows.length; index++) {
 
 
 
-
-
 // ------------------------------
 //  TASK FIVE - Save the event in local storage when the save button is clicked in that timeblock
 // ------------------------------
 
 
 
+// Introducing new element for the button. 
+let saveButton = $("button")
+// console.log(saveButton)
 
-let subject = allrows.eq([0]).children().eq([1])
-let saveButton = allrows.eq([0]).children().eq([2])
+
+
+containerEl.on("click","button", function(event){
+    let sib = $(event.target)
+
+    let sibling = $(event.target.previousElementSiblings)
+
+
+    console.log(event)
+    console.log(sib)
+    console.log(sibling)
+
+    console.log("click")
+
+
+}) 
+
+
+
+// console.log("entry save")
+// let firstRow = allrows.eq([0])
+// let time = firstRow.children().eq([0]).text()
+// let entry = firstRow.children().eq([1]).val()
+// localStorage.setItem(time, entry)
+
+
+
+
+
+// // for (let index = 0; index < allrows.length; index++) {
+
+
+    
+// //     const element = array[index];
+    
+// // }
+
+
+
+
+
+
+
+// // saveButton.forEach(button => {
+// //     let siblings = button.siblings()
+// //    console.log(siblings)
+    
+// // });
+
+
+// // let saveEntry = function() {
+// //     console.log(saveButton);
+// //     for (let index = 0; index < allrows.length; index++) {
+// //         let row = allrows.eq([index])
+
+// //         let time = row.children().eq([0]).text()
+// //         let entry = row.children().eq([1]).val()
+// //         let saveItem = row.children().eq([2])
+// //         localStorage.setItem(time, entry)
+
+// //     }
+
+// // }
+
+
+// // saveButton.on("click", saveEntry)
+
+
+
+
+
+
+
+// let subject = allrows.eq([0]).children().eq([1])
+// let saveButton = allrows.eq([0]).children().eq([2])
+
 // subject.text("First item")
 
 
-let enterEntry = function() {
-    console.log(" Enter Entry") 
-}
+// let enterEntry = function() {
+//     console.log(" Enter Entry") 
+// }
 
-subject.on("click", enterEntry)
 
 // select all rows, and iterate over each row, and make this function happen
 
-let saveEntry = function() {
-    console.log("entry save")
-    let firstRow = allrows.eq([0])
-    let time = firstRow.children().eq([0]).text()
-    let entry = firstRow.children().eq([1]).val()
-    localStorage.setItem(time, entry)
+
+
     // for (let index = 0; index < allrows.length; index++) {
+    //     let subject = allrows.eq([index]).children().eq([1])
+    //     let saveButton = allrows.eq([index]).children().eq([2])
+    //     // console.log("log", index, allrows.eq([index]));
+    // }
+
+
+    // console.log("entry save")
+    // let firstRow = allrows.eq([0])
+    // let time = firstRow.children().eq([0]).text()
+    // let entry = firstRow.children().eq([1]).val()
+    // localStorage.setItem(time, entry)
+
+
+    // for (let index = 0; index < allrows.length; index++) {
+    //     console.log("entry save")
     //     let row = allrows.eq([index])
     //     let time = row.children().eq([0]).text()
     //     let entry = row.children().eq([1]).val()
     //     localStorage.setItem(time, entry) 
     //        }
 
-}
 
 
 
 
 
 
-saveButton.on("click", saveEntry)
 
-
-
-
-
-
+// saveButton.on("click", saveEntry)
 
 
 
@@ -201,6 +274,8 @@ saveButton.on("click", saveEntry)
 // ------------------------------
 //  TASK SIX - Persist events between refreshes of a page
 // ------------------------------
+
+
 
 
 
